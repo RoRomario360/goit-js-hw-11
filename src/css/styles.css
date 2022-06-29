@@ -15,8 +15,11 @@ body {
   padding: 0;
   margin: 0;
 }
+img {
+  display: block;
+}
 
-.search-form {
+#search-form {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -78,4 +81,9 @@ body {
     -webkit-transform: scaleY(1);
     transform: scaleY(1);
   }
+}
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
 }
