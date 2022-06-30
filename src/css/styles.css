@@ -62,6 +62,11 @@ img {
     cubic-bezier(0.39, 0.575, 0.565, 1) both;
   animation: scale-up-ver-center 0.4s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 }
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
 
 @-webkit-keyframes scale-up-ver-center {
   0% {
@@ -82,9 +87,4 @@ img {
     -webkit-transform: scaleY(1);
     transform: scaleY(1);
   }
-}
-.gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
 }
