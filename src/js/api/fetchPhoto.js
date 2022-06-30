@@ -15,3 +15,4 @@ export default async function fetchPhotos(value) {
     },
   }).catch(error => console.log(error));
 }
+//test
