@@ -35,6 +35,7 @@ function onFormSubmit(e) {
   query = e.target.elements.searchQuery.value;
 
   fetchPhotos(query).then(response => {
+    console.log(response);
     if (response.data.hits.length === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
