@@ -12,7 +12,7 @@ Notiflix.Notify.init({
 
 //scroll
 let query = '';
-let page = 0;
+let page;
 let newpages;
 
 const target = document.querySelector('.target');
@@ -34,13 +34,13 @@ function onFormSubmit(e) {
 
   galleryBox.innerHTML = '';
   observer.unobserve(target);
-  page = 0;
+  page = 1;
   query = e.target.elements.searchQuery.value;
   if (!query) {
     Notiflix.Notify.failure('Enter any value');
     return;
   }
-  fetchPhotos(query).then(response => {
+  fetchPhotos(query, page).then(response => {
     console.log(response.data.hits);
     if (response.data.totalHits === 0) {
       Notiflix.Notify.failure(
