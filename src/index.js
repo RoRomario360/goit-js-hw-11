@@ -13,10 +13,11 @@ Notiflix.Notify.init({
 //scroll
 let query = '';
 let page = 0;
+
 const target = document.querySelector('.target');
 const options = {
   root: null,
-  rootMargin: '200px',
+  rootMargin: '300px',
   threshold: 1.0,
 };
 const observer = new IntersectionObserver(updatePhotos, options);
@@ -29,20 +30,21 @@ searchForm.addEventListener('submit', onFormSubmit);
 //form
 function onFormSubmit(e) {
   e.preventDefault();
+
   galleryBox.innerHTML = '';
   observer.unobserve(target);
   page = 0;
   query = e.target.elements.searchQuery.value;
 
   fetchPhotos(query).then(response => {
-    console.log(response.data);
-    if (response.data.hits.length === 0) {
+    console.log(response.data.hits);
+    if (response.data.totalHits === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
     }
     //
-    if (response.data.hits.length) {
+    if (response.data.totalHits > 0) {
       Notiflix.Notify.success(
         `Hooray! We found ${response.data.totalHits} images.`
       );
@@ -77,9 +79,11 @@ function renderCards(images) {
     .join('');
   //FIXME:
   galleryBox.insertAdjacentHTML('beforeend', listOfPhotos);
+
   const lightbox = new SimpleLightbox('.gallery a', {
     /* options */
   });
+  lightbox.refresh();
   // lightbox.refresh();
 }
 
@@ -92,13 +96,11 @@ function updatePhotos(entries) {
       page += 1;
       fetchPhotos(query, page).then(response => {
         //FIXME:
-        console.log(response.data.totalHits < page);
+
         if (response.data.totalHits < page * 40) {
           Notiflix.Notify.failure(
             `We're sorry, but you've reached the end of search results.`
           );
-        } else if (response.data.totalHits < 40) {
-          return;
         }
         renderCards(response.data.hits);
       });
