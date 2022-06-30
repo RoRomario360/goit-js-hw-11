@@ -10,10 +10,10 @@ export default async function fetchPhotos(value, page) {
       orientation: 'horizontal',
       image_type: 'photo',
       safesearch: true,
-      page: 1,
-      per_page: 40,
+      page: page,
+      per_page: 200,
     },
-  }).catch(error => console.log(error));
+  });
   return response;
 }
 //test

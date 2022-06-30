@@ -34,22 +34,24 @@ function onFormSubmit(e) {
   page = 0;
   query = e.target.elements.searchQuery.value;
 
-  fetchPhotos(query).then(response => {
-    console.log(response);
-    if (response.data.hits.length === 0) {
-      Notiflix.Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-    }
-    //
-    if (response.data.hits.length) {
-      Notiflix.Notify.success(
-        `Hooray! We found ${response.data.totalHits} images.`
-      );
-    }
-    renderCards(response.data.hits);
-    observer.observe(target);
-  });
+  fetchPhotos(query)
+    .then(response => {
+      // console.log(response);
+      if (response.data.hits.length === 0) {
+        Notiflix.Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+      }
+      //
+      if (response.data.hits.length) {
+        Notiflix.Notify.success(
+          `Hooray! We found ${response.data.totalHits} images.`
+        );
+      }
+      renderCards(response.data.hits);
+      observer.observe(target);
+    })
+    .catch(error => console.log(error));
 }
 //render
 
@@ -80,18 +82,20 @@ function renderCards(images) {
   const lightbox = new SimpleLightbox('.gallery a', {
     /* options */
   });
-  lightbox.refresh();
+  // lightbox.refresh();
 }
 
 //scroll
 function updatePhotos(entries) {
-  // console.log(entries);
+  console.log(entries);
   entries.forEach(entry => {
     if (entry.isIntersecting) {
+      console.log(query);
       page += 1;
       fetchPhotos(query, page).then(response => {
         //FIXME:
-        if (data.hits.length === 0) {
+        console.log(response.data.totalHits < page);
+        if (response.data.totalHits) {
           Notiflix.Notify.failure(
             `We're sorry, but you've reached the end of search results.`
           );
