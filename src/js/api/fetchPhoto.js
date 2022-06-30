@@ -4,7 +4,7 @@ import Notiflix from 'notiflix';
 export default async function fetchPhotos(value, page) {
   try {
     const response = await axios({
-      url: 'https:pixabay.com/api/',
+      url: 'https://pixabay.com/api/',
       params: {
         key: '28345018-0c1af10fb3ec556a31002db0e',
         q: value,
