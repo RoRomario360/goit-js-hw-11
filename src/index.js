@@ -10,8 +10,17 @@ Notiflix.Notify.init({
   closeButton: false,
 });
 
-//refs
-
+//scroll
+let query = '';
+let page = 0;
+const target = document.querySelector('.target');
+const options = {
+  root: null,
+  rootMargin: '200px',
+  threshold: 1.0,
+};
+const observer = new IntersectionObserver(updatePhotos, options);
+//
 const searchForm = document.querySelector('#search-form');
 const galleryBox = document.querySelector('.gallery');
 //addlistners
@@ -20,13 +29,19 @@ searchForm.addEventListener('submit', onFormSubmit);
 //form
 function onFormSubmit(e) {
   e.preventDefault();
-  const query = e.target.elements.searchQuery.value;
+  galleryBox.innerHTML = '';
+  observer.unobserve(target);
+  page = 0;
+  query = e.target.elements.searchQuery.value;
 
   fetchPhotos(query).then(response => {
     if (response.data.hits.length === 0) {
-      Notiflix.Notify.failure('Oops');
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
     }
     renderCards(response.data.hits);
+    observer.observe(target);
   });
 }
 //render
@@ -35,7 +50,7 @@ function renderCards(images) {
   const listOfPhotos = images
     .map(image => {
       return `<div class="photo-card">
-  <a href="${image.largeImageURL}"><img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" /></a>
+  <a class="card-link" href="${image.largeImageURL}"><img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" /></a>
   <div class="info">
     <p class="info-item">
       <b>Likes ${image.likes}</b>
@@ -48,13 +63,29 @@ function renderCards(images) {
     </p>
     <p class="info-item">
       <b>Downloads ${image.downloads}</b>
-    </p>
+    </p>  
   </div>
 </div>`;
     })
     .join('');
-  galleryBox.insertAdjacentHTML('afterbegin', listOfPhotos);
+  //FIXME:
+  galleryBox.insertAdjacentHTML('beforeend', listOfPhotos);
   const lightbox = new SimpleLightbox('.gallery a', {
     /* options */
   });
+  lightbox.refresh();
 }
+
+//scroll
+function updatePhotos(entries) {
+  // console.log(entries);
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      page += 1;
+      fetchPhotos(query, page).then(response => {
+        renderCards(response.data.hits);
+      });
+    }
+  });
+}
+//

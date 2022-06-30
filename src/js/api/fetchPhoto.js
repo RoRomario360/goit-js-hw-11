@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Notiflix from 'notiflix';
 
-export default function fetchPhotos(value, page) {
+export default function fetchPhotos(value, page = 1) {
   return axios({
     url: ' https:pixabay.com/api/',
     params: {
@@ -10,14 +10,14 @@ export default function fetchPhotos(value, page) {
       orientation: 'horizontal',
       image_type: 'photo',
       safesearch: true,
-      page: 1,
+      page: 10,
       per_page: 40,
     },
   });
 }
 //   const BASE_URL = 'https://pixabay.com/api/';
 //   const key = '28345018-0c1af10fb3ec556a31002db0e';
-//   //FIXME:
+//
 //   const searchUrl =
 //     '&image_type=photo&orientation=horizontal&safesearch=true&per_page=40';
 
