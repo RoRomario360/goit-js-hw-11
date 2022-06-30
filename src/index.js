@@ -35,7 +35,7 @@ function onFormSubmit(e) {
   query = e.target.elements.searchQuery.value;
 
   fetchPhotos(query).then(response => {
-    // console.log(response);
+    console.log(response.data);
     if (response.data.hits.length === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
@@ -93,10 +93,12 @@ function updatePhotos(entries) {
       fetchPhotos(query, page).then(response => {
         //FIXME:
         console.log(response.data.totalHits < page);
-        if (response.data.totalHits) {
+        if (response.data.totalHits < page * 40) {
           Notiflix.Notify.failure(
             `We're sorry, but you've reached the end of search results.`
           );
+        } else if (response.data.totalHits < 40) {
+          return;
         }
         renderCards(response.data.hits);
       });
