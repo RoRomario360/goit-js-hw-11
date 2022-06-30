@@ -13,6 +13,7 @@ Notiflix.Notify.init({
 //scroll
 let query = '';
 let page = 0;
+let newpages;
 
 const target = document.querySelector('.target');
 const options = {
@@ -44,11 +45,12 @@ function onFormSubmit(e) {
       );
     }
     //
-    if (response.data.totalHits > 0) {
+    if (response.data.totalHits > 1) {
       Notiflix.Notify.success(
         `Hooray! We found ${response.data.totalHits} images.`
       );
     }
+
     renderCards(response.data.hits);
     observer.observe(target);
   });
@@ -90,17 +92,18 @@ function renderCards(images) {
 //scroll
 function updatePhotos(entries) {
   console.log(entries);
-  entries.forEach(entry => {
+  newpages = entries.forEach(entry => {
     if (entry.isIntersecting) {
       console.log(query);
       page += 1;
       fetchPhotos(query, page).then(response => {
         //FIXME:
 
-        if (response.data.totalHits < page * 40) {
+        if (response.data.totalHits.length <= 40) {
           Notiflix.Notify.failure(
             `We're sorry, but you've reached the end of search results.`
           );
+          return;
         }
         renderCards(response.data.hits);
       });
