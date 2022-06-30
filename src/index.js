@@ -89,7 +89,8 @@ function updatePhotos(entries) {
     if (entry.isIntersecting) {
       page += 1;
       fetchPhotos(query, page).then(response => {
-        if (response.data.hits.length === 0) {
+        //FIXME:
+        if (data.hits.length === 0) {
           Notiflix.Notify.failure(
             `We're sorry, but you've reached the end of search results.`
           );
