@@ -34,21 +34,23 @@ function onFormSubmit(e) {
   page = 0;
   query = e.target.elements.searchQuery.value;
 
-  fetchPhotos(query).then(response => {
-    if (response.data.hits.length === 0) {
-      Notiflix.Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-    }
-    //
-    if (response.data.hits.length) {
-      Notiflix.Notify.success(
-        `Hooray! We found ${response.data.totalHits} images.`
-      );
-    }
-    renderCards(response.data.hits);
-    observer.observe(target);
-  });
+  fetchPhotos(query)
+    .then(response => {
+      if (response.data.hits.length === 0) {
+        Notiflix.Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+      }
+      //
+      if (response.data.hits.length) {
+        Notiflix.Notify.success(
+          `Hooray! We found ${response.data.totalHits} images.`
+        );
+      }
+      renderCards(response.data.hits);
+      observer.observe(target);
+    })
+    .catch(error => console.log(error));
 }
 //render
 
